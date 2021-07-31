@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+
+dotenv.config({path: __dirname + '/config/.env.' + process.env.NODE_ENV});
+
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -18,6 +23,16 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+
+  axios: {
+    baseURL: process.env.API_HOST,
+  },
+
+  server: {
+    port: process.env.SERVER_PORT,
+    host: process.env.SERVER_HOST,
+  },
+
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
