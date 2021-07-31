@@ -1,52 +1,57 @@
 <template>
-    <div>
-        <div class="div_logo">
-            <img src="https://cdn.plabelclothing.com/source/web-portal-plabel/other/logo-small.png">
-        </div>
-        <br>
-        <section class="section reg_form">
-            <!--<b-field class="h2_title">-->
-            <!--<h2 class="title">-->
-            <!--Login to backoffice panel-->
-            <!--</h2>-->
-            <!--</b-field>-->
-            <b-field label="Username"
-                     message="This username is available">
-                <b-input value="johnsilver" maxlength="30"></b-input>
-            </b-field>
-            <b-field label="Password">
-                <b-input type="password"
-                         value="iwantmytreasure"
-                         password-reveal>
-                </b-input>
-            </b-field>
-            <b-field>
-                <b-button>Login</b-button>
-            </b-field>
-        </section>
-    </div>
+  <div>
+    <section @keydown.enter="$emit('loginButton', login, password)" class="section reg_form">
+      <div class="div_logo">
+        <img src="https://cdn.plabelclothing.com/source/web-portal-plabel/other/logo-small.png">
+      </div>
+      <br>
+      <b-field label="Username"
+               :message=message>
+        <b-input v-model="login" maxlength="30"></b-input>
+      </b-field>
+      <b-field label="Password">
+        <b-input type="password"
+                 v-model="password"
+                 password-reveal>
+        </b-input>
+      </b-field>
+      <b-field class="button_center">
+        <b-button @click="$emit('loginButton', login, password)">Login</b-button>
+      </b-field>
+    </section>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'Auth'
+export default {
+  name:  'Auth',
+  props: {
+    message:     String,
+    loginButton: Function,
+  },
+  data() {
+    return {
+      login:    null,
+      password: null,
     }
+  },
+}
 </script>
 
 <style>
-    .div_logo {
-        margin: 10% auto 0%;
-        width: 150px;
-    }
+.div_logo {
+  margin:10% auto 0%;
+  width:150px;
+}
 
-    .button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.button_center {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    .reg_form {
-        margin: 0 auto;
-        width: 400px;
-    }
+.reg_form {
+  margin:0 auto;
+  width:400px;
+}
 </style>
