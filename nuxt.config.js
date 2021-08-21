@@ -8,10 +8,6 @@ export default {
 
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
-		title:     'web-backoffice-plabel',
-		htmlAttrs: {
-			lang: 'en'
-		},
 		meta:      [
 			{charset: 'utf-8'},
 			{name: 'viewport', content: 'width=device-width, initial-scale=1'},
@@ -30,6 +26,10 @@ export default {
 
 	axios: {
 		baseURL: process.env.API_HOST,
+	},
+
+	router: {
+		middleware: 'auth'
 	},
 
 	server: {
@@ -56,6 +56,7 @@ export default {
 		// https://go.nuxtjs.dev/buefy
 		'nuxt-buefy',
 		'@nuxtjs/axios',
+		'cookie-universal-nuxt',
 	],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build

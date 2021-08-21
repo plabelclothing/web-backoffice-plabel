@@ -7,7 +7,7 @@
       <br>
       <b-field label="Username"
                :message=message>
-        <b-input v-model="login" maxlength="30"></b-input>
+        <b-input v-model="login"></b-input>
       </b-field>
       <b-field label="Password">
         <b-input type="password"
