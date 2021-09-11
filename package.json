@@ -9,15 +9,23 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-private-methods": "^7.14.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/dotenv": "^1.4.1",
     "cookie-universal-nuxt": "^2.1.5",
     "core-js": "^3.15.1",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.13.3",
     "nuxt-buefy": "^0.4.8"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.17",
     "axios": "^0.21.1",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "fibers": "^5.0.0",
+    "sass": "^1.38.1",
+    "sass-loader": "^10.2.0",
+    "vuex": "^3.6.2"
   }
 }
