@@ -1,21 +1,36 @@
 <template>
   <div>
     <title-bar :titleStack="titleStack"/>
-    <p>DU[A</p>
+    <section class="section is-main-section">
+      <card-component class="has-table has-mobile-sort-spaced">
+        <table-orders
+            :orders="orders"
+            :isLoading="isLoadingTable"
+            :paginated="paginatedTable"
+            :perPage="perPage"
+        />
+      </card-component>
+    </section>
   </div>
 </template>
 
 <script>
 import {CookieConst, RouteConst} from '../assets/const';
-import TitleBar from "../components/Layout/TitleBar";
+import TitleBar from '../components/Layout/TitleBar';
+import CardComponent from '../components/Layout/CardComponent';
+import TableOrders from '../components/Layout/TableOrders';
 
 export default {
   layout: 'dashboard',
   data() {
     return {
-      isActive:   true,
-      cookie:     null,
-      titleStack: [
+      isActive:       true,
+      cookie:         null,
+      orders:         [],
+      isLoadingTable: false,
+      paginatedTable: false,
+      perPage:        10,
+      titleStack:     [
         'Dashboard',
         'General'
       ]
@@ -23,6 +38,8 @@ export default {
   },
   components: {
     TitleBar,
+    TableOrders,
+    CardComponent,
   },
   head() {
     return {
@@ -44,7 +61,7 @@ export default {
       ],
     }
   },
-  mounted() {
+  async mounted() {
     const cookie = this.$cookies.get(CookieConst.A_COOKIE);
     if (!cookie) {
       return this.$router.push({
@@ -52,6 +69,41 @@ export default {
       });
     }
     this.cookie = cookie;
+
+    /** get default data **/
+    try {
+      const resultOfGetData = await this.$api.userData(cookie);
+      this.$store.commit('SET_USER_EMAIL', resultOfGetData.data.data.userEmail);
+    } catch (e) {
+      const now = new Date();
+      this.$cookies.remove(CookieConst.A_COOKIE, {
+        expires: now.toUTCString(),
+        path:    '/'
+      });
+      return this.$router.push({
+        name: RouteConst.AUTHORIZATION,
+      });
+    }
+
+    /** get orders **/
+    try {
+      const data = {
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+      this.isLoadingTable = true;
+      const resultOfGetData = await this.$api.getOrder(cookie, data);
+      this.orders = resultOfGetData.data.data;
+      if (this.orders.length > this.perPage) {
+        this.paginatedTable = true;
+      }
+      this.isLoadingTable = false;
+    } catch (e) {
+      this.isLoadingTable = false;
+      this.$buefy.toast.open({
+        message: `Error: ${e.message}`,
+        type:    'is-danger'
+      })
+    }
   }
 }
 </script>

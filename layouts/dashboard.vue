@@ -40,9 +40,6 @@ export default {
   },
   created() {
     document.getElementsByTagName('html')[0].classList.add('has-aside-left', 'has-aside-mobile-transition', 'has-navbar-fixed-top', 'has-aside-expanded');
-    this.$store.commit('user', {
-      email:  'john@example.com',
-    })
   },
 }
 </script>
