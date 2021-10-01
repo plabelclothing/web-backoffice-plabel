@@ -28,7 +28,7 @@
       </b-table-column>
       <b-table-column custom-key="actions" cell-class="is-actions-cell" v-slot="props">
         <div class="buttons is-right">
-          <router-link :to="{name:'order.edit', params: {id: props.row.user_order__uuid}}"
+          <router-link :to="{name:'order-orderUuid', params: {orderUuid: props.row.user_order__uuid}}"
                        class="button is-small is-primary">
             <b-icon icon="information-outline" size="is-small"/>
           </router-link>

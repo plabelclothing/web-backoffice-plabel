@@ -1,7 +1,7 @@
 <template>
   <aside v-show="isAsideVisible" class="aside is-placed-left is-expanded">
     <aside-tools :is-main-menu="true">
-      <span slot="label"><b>PLABEL</b> backoffice</span>
+      <span slot="label"><img src="~static/logo.svg" style="width: 90px;height: 50px;" alt="logo"></span>
     </aside-tools>
     <div class="menu is-menu-main">
       <template v-for="(menuGroup, index) in menu">

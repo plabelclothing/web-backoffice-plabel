@@ -29,6 +29,17 @@ export default function ({$axios, app}, inject) {
 		});
 	};
 
+	api.getOrderByUuid = async (token, data, uuid) => {
+		return await $axios({
+			method:  'post',
+			url:     `/v1/order/${uuid}`,
+			data,
+			headers: {
+				Token: token,
+			}
+		});
+	};
+
 	// Inject to context as $api
 	inject('api', api)
 }

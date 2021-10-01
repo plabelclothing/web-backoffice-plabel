@@ -25,7 +25,6 @@ export default {
   data() {
     return {
       isActive:       true,
-      cookie:         null,
       orders:         [],
       isLoadingTable: false,
       paginatedTable: false,
@@ -33,7 +32,8 @@ export default {
       titleStack:     [
         'Dashboard',
         'General'
-      ]
+      ],
+      timer:          "",
     }
   },
   components: {
@@ -62,48 +62,45 @@ export default {
     }
   },
   async mounted() {
-    const cookie = this.$cookies.get(CookieConst.A_COOKIE);
-    if (!cookie) {
-      return this.$router.push({
-        name: RouteConst.AUTHORIZATION,
-      });
-    }
-    this.cookie = cookie;
-
-    /** get default data **/
-    try {
-      const resultOfGetData = await this.$api.userData(cookie);
-      this.$store.commit('SET_USER_EMAIL', resultOfGetData.data.data.userEmail);
-    } catch (e) {
-      const now = new Date();
-      this.$cookies.remove(CookieConst.A_COOKIE, {
-        expires: now.toUTCString(),
-        path:    '/'
-      });
-      return this.$router.push({
-        name: RouteConst.AUTHORIZATION,
-      });
-    }
-
     /** get orders **/
-    try {
-      const data = {
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      };
-      this.isLoadingTable = true;
-      const resultOfGetData = await this.$api.getOrder(cookie, data);
-      this.orders = resultOfGetData.data.data;
-      if (this.orders.length > this.perPage) {
-        this.paginatedTable = true;
+    await this.fetchData();
+  },
+  methods: {
+    cancelAutoUpdate() {
+      clearInterval(this.timer);
+    },
+    async fetchData() {
+      const cookie = this.$cookies.get(CookieConst.A_COOKIE);
+      if (!cookie) {
+        return this.$router.push({
+          name: RouteConst.AUTHORIZATION,
+        });
       }
-      this.isLoadingTable = false;
-    } catch (e) {
-      this.isLoadingTable = false;
-      this.$buefy.toast.open({
-        message: `Error: ${e.message}`,
-        type:    'is-danger'
-      })
+      try {
+        const data = {
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        };
+        this.isLoadingTable = true;
+        const resultOfGetData = await this.$api.getOrder(cookie, data);
+        this.orders = resultOfGetData.data.data;
+        if (this.orders.length > this.perPage) {
+          this.paginatedTable = true;
+        }
+        this.isLoadingTable = false;
+      } catch (e) {
+        this.isLoadingTable = false;
+        this.$buefy.toast.open({
+          message: `Error: ${e.message}`,
+          type:    'is-danger'
+        })
+      }
     }
-  }
+  },
+  created() {
+    this.timer = setInterval(this.fetchData, 30000);
+  },
+  beforeDestroy() {
+    this.cancelAutoUpdate();
+  },
 }
 </script>
