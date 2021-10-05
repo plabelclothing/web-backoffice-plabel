@@ -12,7 +12,6 @@
             v-else
             :key="index"
             :menu="menuGroup"
-            @menu-click="menuClick"
         />
       </template>
     </div>
@@ -39,11 +38,6 @@ export default {
   computed: {
     ...mapState(['isAsideVisible'])
   },
-  methods:  {
-    menuClick(item) {
-      console.log(item)
-    }
-  }
 }
 </script>
 

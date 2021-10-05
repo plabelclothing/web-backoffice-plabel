@@ -32,6 +32,11 @@ export default {
             label: 'Sales',
             icon:  'currency-usd',
           },
+          {
+            to:    '/search',
+            label: 'Search',
+            icon:  'magnify',
+          },
         ],
         'Other',
         [],

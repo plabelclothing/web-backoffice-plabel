@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-bar :titleStack="titleStack"/>
+    <title-bar :title-stack="titleStack"/>
     <section class="section is-main-section">
       <card-component class="has-table has-mobile-sort-spaced">
         <table-orders
@@ -15,34 +15,17 @@
 </template>
 
 <script>
-import {CookieConst, RouteConst} from '../assets/const';
+import {CookieConst, RouteConst, UserOrderStatus} from '../assets/const';
 import TitleBar from '../components/Layout/TitleBar';
 import CardComponent from '../components/Layout/CardComponent';
 import TableOrders from '../components/Layout/TableOrders';
 
 export default {
   layout: 'dashboard',
-  data() {
-    return {
-      orders:         [],
-      isLoadingTable: false,
-      paginatedTable: false,
-      perPage:        10,
-      titleStack:     [
-        'Dashboard',
-        'General'
-      ],
-      timer:          "",
-    }
-  },
-  components: {
-    TitleBar,
-    TableOrders,
-    CardComponent,
-  },
+  name:   'Sales',
   head() {
     return {
-      title: 'Dashboard | BACKOFFICE | PLABEL CORP.',
+      title: 'Sales | BACKOFFICE | PLABEL CORP.',
       meta:  [
         {
           charset: 'utf-8'
@@ -58,6 +41,24 @@ export default {
           }]
         }
       ],
+    }
+  },
+  components: {
+    TitleBar,
+    CardComponent,
+    TableOrders,
+  },
+  data() {
+    return {
+      titleStack:     [
+        'Dashboard',
+        'Sales'
+      ],
+      isLoading:      false,
+      orders:         [],
+      isLoadingTable: false,
+      paginatedTable: false,
+      perPage:        20,
     }
   },
   async mounted() {
@@ -77,7 +78,10 @@ export default {
       }
       try {
         const data = {
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          timezone:   Intl.DateTimeFormat().resolvedOptions().timeZone,
+          conditions: {
+            user_order__status: [UserOrderStatus.APPROVED],
+          }
         };
         this.isLoadingTable = true;
         const resultOfGetData = await this.$api.getOrder(cookie, data);
